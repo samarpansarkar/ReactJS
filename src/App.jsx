@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import MainLayout from './components/layout/MainLayout';
+import HomePage from './pages/HomePage';
+import ReactPage from './topics/react/ReactPage';
 
-function App() {
-  const [count, setCount] = useState(0)
+// Placeholder components for future topics
+const PlaceholderPage = ({ title }) => (
+  <div className="text-center py-20">
+    <h2 className="text-3xl font-bold text-gray-300 mb-4">{title}</h2>
+    <p className="text-gray-500">Content coming soon...</p>
+  </div>
+);
 
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
 
-export default App
+          {/* React Route - Matches /react and /react/:topicId */}
+          <Route path="react" element={<ReactPage />} />
+          <Route path="react/:topicId" element={<ReactPage />} />
+
+          {/* Other Topics */}
+          <Route path="js" element={<PlaceholderPage title="JavaScript Core" />} />
+          <Route path="html-css" element={<PlaceholderPage title="HTML & CSS" />} />
+          <Route path="ts" element={<PlaceholderPage title="TypeScript" />} />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
