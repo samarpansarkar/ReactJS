@@ -5,7 +5,7 @@ const MainLayout = () => {
     const location = useLocation();
 
     const navItems = [
-        { path: '/react', label: 'React Optimization', icon: Zap, color: 'text-blue-500' },
+        { path: '/react', label: 'React', icon: Zap, color: 'text-blue-500' },
         { path: '/js', label: 'JavaScript', icon: Code, color: 'text-yellow-500' },
         { path: '/html-css', label: 'HTML & CSS', icon: Layers, color: 'text-orange-500' },
         { path: '/ts', label: 'TypeScript', icon: FileCode, color: 'text-blue-600' },
@@ -18,7 +18,7 @@ const MainLayout = () => {
                 <div className="p-6 border-b border-gray-100">
                     <Link to="/" className="flex items-center gap-2 text-indigo-700 font-bold text-xl">
                         <BookOpen className="w-8 h-8" />
-                        <span>DevAcademy</span>
+                        <span>Samarpan's Notes</span>
                     </Link>
                 </div>
 
@@ -67,7 +67,7 @@ const MainLayout = () => {
             <div className="md:hidden fixed top-0 w-full bg-white border-b border-gray-200 p-4 z-20 flex items-center justify-between">
                 <Link to="/" className="flex items-center gap-2 text-indigo-700 font-bold text-lg">
                     <BookOpen className="w-6 h-6" />
-                    <span>DevAcademy</span>
+                    <span>Samarpan's Notes</span>
                 </Link>
 
                 <div className="text-sm text-gray-500">Menu</div>
