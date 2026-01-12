@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { BookOpen, ChevronDown, ChevronUp, Play } from 'lucide-react';
 
@@ -197,7 +197,15 @@ const TopicLayout = ({ title, sections, basePath }) => {
                                 </h3>
                                 <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex-1">
                                     {activeContent.component ? (
-                                        <activeContent.component />
+                                        <div className="relative min-h-[200px]">
+                                            <Suspense fallback={
+                                                <div className="flex items-center justify-center absolute inset-0 bg-white/50 z-10">
+                                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                                                </div>
+                                            }>
+                                                <activeContent.component />
+                                            </Suspense>
+                                        </div>
                                     ) : (
                                         <div className="text-center text-gray-500 py-12">
                                             No interactive demo available for this topic.

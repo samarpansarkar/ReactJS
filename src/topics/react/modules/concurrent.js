@@ -1,9 +1,18 @@
+import { lazy } from "react";
 import { Activity, Server, Hash, Wifi, Layers } from "lucide-react";
-import UseTransitionDemo from "../components/UseTransitionDemo";
-import UseDeferredValueDemo from "../components/UseDeferredValueDemo";
-import UseIdDemo from "../components/UseIdDemo";
-import UseSyncExternalStoreDemo from "../components/UseSyncExternalStoreDemo";
-import UseInsertionEffectDemo from "../components/UseInsertionEffectDemo";
+
+// Lazy Load Components
+const UseTransitionDemo = lazy(() => import("../components/UseTransitionDemo"));
+const UseDeferredValueDemo = lazy(() =>
+  import("../components/UseDeferredValueDemo")
+);
+const UseIdDemo = lazy(() => import("../components/UseIdDemo"));
+const UseSyncExternalStoreDemo = lazy(() =>
+  import("../components/UseSyncExternalStoreDemo")
+);
+const UseInsertionEffectDemo = lazy(() =>
+  import("../components/UseInsertionEffectDemo")
+);
 
 export const concurrentHooks = [
   {

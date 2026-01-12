@@ -1,7 +1,14 @@
+import { lazy } from "react";
 import { MoreHorizontal, Layout, Terminal } from "lucide-react";
-import UseImperativeHandleDemo from "../components/UseImperativeHandleDemo";
-import UseLayoutEffectDemo from "../components/UseLayoutEffectDemo";
-import UseDebugValueDemo from "../components/UseDebugValueDemo";
+
+// Lazy Load Components
+const UseImperativeHandleDemo = lazy(() =>
+  import("../components/UseImperativeHandleDemo")
+);
+const UseLayoutEffectDemo = lazy(() =>
+  import("../components/UseLayoutEffectDemo")
+);
+const UseDebugValueDemo = lazy(() => import("../components/UseDebugValueDemo"));
 
 export const advancedHooks = [
   {

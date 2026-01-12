@@ -1,9 +1,16 @@
+import { lazy } from "react";
 import { Activity, Users, Clock, Package, Layers } from "lucide-react";
-import CustomHooksDemo from "../components/CustomHooksDemo";
-import ContextOptimizationDemo from "../components/ContextOptimizationDemo";
-import DebounceDemo from "../components/DebounceDemo";
-import LazyLoadDemo from "../components/LazyLoadExample";
-import VirtualizationDemo from "../components/VirtualizationDemo";
+
+// Lazy Load Components
+const CustomHooksDemo = lazy(() => import("../components/CustomHooksDemo"));
+const ContextOptimizationDemo = lazy(() =>
+  import("../components/ContextOptimizationDemo")
+);
+const DebounceDemo = lazy(() => import("../components/DebounceDemo"));
+const LazyLoadDemo = lazy(() => import("../components/LazyLoadExample"));
+const VirtualizationDemo = lazy(() =>
+  import("../components/VirtualizationDemo")
+);
 
 export const patterns = [
   {

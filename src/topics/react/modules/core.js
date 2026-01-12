@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import {
   Box,
   Database,
@@ -7,14 +8,15 @@ import {
   Code,
   RefreshCw,
 } from "lucide-react";
-import UseReducerDemo from "../components/UseReducerDemo";
-import UseRefDemo from "../components/UseRefDemo";
 
-import UseContextDemo from "../components/UseContextDemo";
-import UseMemoDemo from "../components/UseMemoDemo";
-import UseCallbackDemo from "../components/UseCallbackDemo";
-import UseStateDemo from "../components/UseStateDemo";
-import UseEffectDemo from "../components/UseEffectDemo";
+// Lazy Load Components
+const UseReducerDemo = lazy(() => import("../components/UseReducerDemo"));
+const UseRefDemo = lazy(() => import("../components/UseRefDemo"));
+const UseContextDemo = lazy(() => import("../components/UseContextDemo"));
+const UseMemoDemo = lazy(() => import("../components/UseMemoDemo"));
+const UseCallbackDemo = lazy(() => import("../components/UseCallbackDemo"));
+const UseStateDemo = lazy(() => import("../components/UseStateDemo"));
+const UseEffectDemo = lazy(() => import("../components/UseEffectDemo"));
 
 export const coreHooks = [
   {

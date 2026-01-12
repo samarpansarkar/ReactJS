@@ -1,7 +1,10 @@
+import { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
-import HomePage from './pages/HomePage';
-import ReactPage from './topics/react/ReactPage';
+
+// Lazy Load Pages
+const HomePage = lazy(() => import('./pages/HomePage'));
+const ReactPage = lazy(() => import('./topics/react/ReactPage'));
 
 // Placeholder components for future topics
 const PlaceholderPage = ({ title }) => (
@@ -11,16 +14,44 @@ const PlaceholderPage = ({ title }) => (
   </div>
 );
 
+// Loading Fallback
+const PageLoader = () => (
+  <div className="flex items-center justify-center h-full min-h-[50vh]">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+  </div>
+);
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} />
+          <Route
+            index
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <HomePage />
+              </Suspense>
+            }
+          />
 
-          {/* React Route - Matches /react and /react/:topicId */}
-          <Route path="react" element={<ReactPage />} />
-          <Route path="react/:topicId" element={<ReactPage />} />
+          {/* React Route */}
+          <Route
+            path="react"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <ReactPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="react/:topicId"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <ReactPage />
+              </Suspense>
+            }
+          />
 
           {/* Other Topics */}
           <Route path="js" element={<PlaceholderPage title="JavaScript Core" />} />
