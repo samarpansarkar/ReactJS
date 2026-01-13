@@ -1,6 +1,7 @@
 import { useState, useMemo, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import { BookOpen, Play } from 'lucide-react';
+import LiveRenderer from '../LiveRenderer';
 
 const TopicLayout = ({ title, sections, basePath }) => {
     const { topicId } = useParams();
@@ -191,7 +192,9 @@ const TopicLayout = ({ title, sections, basePath }) => {
                                     <span className="text-xs font-normal text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">Interactive</span>
                                 </h3>
                                 <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex-1">
-                                    {activeContent.component ? (
+                                    {activeContent.liveCode ? (
+                                        <LiveRenderer code={activeContent.liveCode} />
+                                    ) : activeContent.component ? (
                                         <div className="relative min-h-[200px]">
                                             <Suspense fallback={
                                                 <div className="flex items-center justify-center absolute inset-0 bg-white/50 dark:bg-gray-900/50 z-10">

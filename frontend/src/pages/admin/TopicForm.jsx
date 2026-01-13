@@ -25,6 +25,7 @@ const TopicForm = () => {
         icon: 'Box',
         description: '',
         componentKey: '',
+        liveCode: '', // New field for live coding
         theory: {
             overview: '',
             definition: '',
@@ -265,6 +266,22 @@ const TopicForm = () => {
                             </select>
                         </div>
                     </div>
+
+                    <div>
+                        <label className="block text-sm text-gray-400 mb-1">Live Component Code (Optional)</label>
+                        <p className="text-xs text-gray-500 mb-2">
+                            Write standard React code. The component is already wrapped in a function, just write the return statement or hook logic.
+                            Example: <code className="text-indigo-400">{'<button onClick={() => alert("Hi")}>Click Me</button>'}</code>
+                        </p>
+                        <textarea
+                            name="liveCode"
+                            value={formData.liveCode}
+                            onChange={handleChange}
+                            className="w-full bg-gray-900 border border-gray-600 rounded p-4 text-green-400 font-mono text-sm h-48"
+                            placeholder="<div>Your JSX here</div>"
+                        />
+                    </div>
+
                     <div>
                         <label className="block text-sm text-gray-400 mb-1">Short Description</label>
                         <textarea
@@ -275,6 +292,7 @@ const TopicForm = () => {
                         />
                     </div>
                 </div>
+
 
                 {/* Theory Content */}
                 <div className="space-y-4">

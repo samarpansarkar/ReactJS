@@ -35,6 +35,9 @@ const topicSchema = mongoose.Schema(
     componentKey: {
       type: String, // Map to frontend component registry e.g. 'UseStateDemo'
     },
+    liveCode: {
+      type: String, // Dynamic code string for live rendering
+    },
     theory: {
       overview: String,
       definition: String,

@@ -8,6 +8,10 @@ import * as LucideIcons from "lucide-react";
 const UseStateDemo = lazy(() =>
   import("../topics/react/components/UseStateDemo")
 );
+
+const UseEffectDemo = lazy(() =>
+  import("../topics/react/components/UseEffectDemo")
+);
 // Add other demos here as you create them
 
 // We don't really need a manual registry if we import * as LucideIcons
@@ -16,6 +20,7 @@ export const iconRegistry = LucideIcons;
 
 export const componentRegistry = {
   UseStateDemo,
+  UseEffectDemo,
 };
 
 export const getIcon = (iconName) => {
