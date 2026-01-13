@@ -8,7 +8,11 @@ const { protect, admin } = require("../middleware/authMiddleware");
 // @access  Public
 router.get("/", async (req, res) => {
   try {
-    const topics = await Topic.find({});
+    const query = {};
+    if (req.query.subject) {
+      query.subject = req.query.subject;
+    }
+    const topics = await Topic.find(query);
     res.json(topics);
   } catch (error) {
     res.status(500).json({ message: "Server Error" });

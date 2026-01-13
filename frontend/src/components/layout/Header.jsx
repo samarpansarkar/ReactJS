@@ -1,19 +1,21 @@
 import { Link, useLocation } from 'react-router-dom';
-import { BookOpen, Code, FileCode, Layers, Zap, Menu, X, Sun, Moon } from 'lucide-react';
+import { BookOpen, Menu, X, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
+import { useSubjects } from '@/context/SubjectContext';
 
 const Header = ({ toggleSidebar }) => {
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { theme, toggleTheme } = useTheme();
+    const { subjects } = useSubjects();
 
-    const navItems = [
-        { path: '/react', label: 'React', icon: Zap, color: 'text-blue-500' },
-        { path: '/js', label: 'JavaScript', icon: Code, color: 'text-yellow-500' },
-        { path: '/html-css', label: 'HTML & CSS', icon: Layers, color: 'text-orange-500' },
-        { path: '/ts', label: 'TypeScript', icon: FileCode, color: 'text-blue-600' },
-    ];
+    const navItems = subjects.map(sub => ({
+        path: sub.path,
+        label: sub.name,
+        icon: sub.iconComponent || BookOpen, // Fallback
+        color: sub.color
+    }));
 
     return (
         <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-30 transition-colors duration-200">

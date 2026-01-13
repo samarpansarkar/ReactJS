@@ -40,8 +40,8 @@ const AdminLayout = () => {
                     <Link
                         to="/admin/dashboard"
                         className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive('/admin/dashboard')
-                                ? 'bg-indigo-600 text-white'
-                                : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                            ? 'bg-indigo-600 text-white'
+                            : 'text-gray-400 hover:bg-gray-700 hover:text-white'
                             }`}
                     >
                         <LayoutDashboard size={20} />
@@ -49,10 +49,21 @@ const AdminLayout = () => {
                     </Link>
 
                     <Link
+                        to="/admin/subjects"
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive('/admin/subjects')
+                            ? 'bg-indigo-600 text-white'
+                            : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                            }`}
+                    >
+                        <BookOpen size={20} />
+                        Subjects
+                    </Link>
+
+                    <Link
                         to="/admin/topic/new"
                         className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive('/admin/topic/new')
-                                ? 'bg-indigo-600 text-white'
-                                : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+                            ? 'bg-indigo-600 text-white'
+                            : 'text-gray-400 hover:bg-gray-700 hover:text-white'
                             }`}
                     >
                         <PlusCircle size={20} />

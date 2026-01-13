@@ -24,6 +24,11 @@ const topicSchema = mongoose.Schema(
       required: true,
       default: "hooks",
     },
+    subject: {
+      type: String, // e.g., 'react', 'js' - matches Subject path or id
+      required: true,
+      default: "react",
+    },
     description: {
       type: String,
     },

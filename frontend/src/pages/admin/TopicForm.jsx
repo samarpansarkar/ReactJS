@@ -11,12 +11,14 @@ const TopicForm = () => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [subjects, setSubjects] = useState([]);
 
     const [formData, setFormData] = useState({
         topicId: '',
         title: '',
         category: 'core',
         section: 'hooks',
+        subject: 'react', // default
         icon: 'Box',
         description: '',
         componentKey: '',
@@ -35,6 +37,19 @@ const TopicForm = () => {
     });
 
     useEffect(() => {
+        const fetchSubjects = async () => {
+            try {
+                const { data } = await api.get('/subjects');
+                setSubjects(data);
+                if (!isEdit && data.length > 0) {
+                    setFormData(prev => ({ ...prev, subject: data[0].path.replace('/', '') }));
+                }
+            } catch (err) {
+                console.error('Failed to fetch subjects');
+            }
+        };
+        fetchSubjects();
+
         if (isEdit) {
             const fetchTopic = async () => {
                 try {
@@ -180,6 +195,20 @@ const TopicForm = () => {
                             />
                         </div>
                         <div>
+                            <label className="block text-sm text-gray-400 mb-1">Subject</label>
+                            <select
+                                name="subject"
+                                value={formData.subject}
+                                onChange={handleChange}
+                                className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
+                                required
+                            >
+                                {subjects.map(sub => (
+                                    <option key={sub.path} value={sub.path.replace('/', '')}>{sub.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
                             <label className="block text-sm text-gray-400 mb-1">Category (e.g. core, advanced)</label>
                             <input
                                 type="text"
@@ -198,8 +227,11 @@ const TopicForm = () => {
                                 onChange={handleChange}
                                 className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
                             >
-                                <option value="hooks">React Hooks</option>
-                                <option value="concepts">Other Concepts</option>
+                                <option value="hooks">Hooks</option>
+                                <option value="concepts">Concepts</option>
+                                {/* We could also fetch distinct sections from DB or allow generic input */}
+                                <option value="general">General</option>
+                                <option value="advanced">Advanced</option>
                             </select>
                         </div>
                         <div>
