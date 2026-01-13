@@ -10,10 +10,6 @@ const AdminLogin = lazy(() => import('@/pages/admin/AdminLogin'));
 const AdminLayout = lazy(() => import('@/components/admin/AdminLayout'));
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 const TopicForm = lazy(() => import('@/pages/admin/TopicForm'));
-const AdminLogin = lazy(() => import('@/pages/admin/AdminLogin'));
-const AdminLayout = lazy(() => import('@/components/admin/AdminLayout'));
-const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
-const TopicForm = lazy(() => import('@/pages/admin/TopicForm'));
 
 
 const PlaceholderPage = ({ title }) => (
@@ -35,12 +31,32 @@ export default function App() {
     <BrowserRouter>
       <TopicProvider>
         <Routes>
-          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/login" element={
+            <Suspense fallback={<PageLoader />}>
+              <AdminLogin />
+            </Suspense>
+          } />
 
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="topic/new" element={<TopicForm />} />
-            <Route path="topic/edit/:id" element={<TopicForm />} />
+          <Route path="/admin" element={
+            <Suspense fallback={<PageLoader />}>
+              <AdminLayout />
+            </Suspense>
+          }>
+            <Route path="dashboard" element={
+              <Suspense fallback={<PageLoader />}>
+                <AdminDashboard />
+              </Suspense>
+            } />
+            <Route path="topic/new" element={
+              <Suspense fallback={<PageLoader />}>
+                <TopicForm />
+              </Suspense>
+            } />
+            <Route path="topic/edit/:id" element={
+              <Suspense fallback={<PageLoader />}>
+                <TopicForm />
+              </Suspense>
+            } />
           </Route>
 
           <Route path="/" element={<MainLayout />}>
