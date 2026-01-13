@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/client';
 import { Edit, Trash2, Plus } from 'lucide-react';
+import { useTopics } from '../../context/TopicContext';
 
 const AdminDashboard = () => {
     const [topics, setTopics] = useState([]);
@@ -23,11 +24,14 @@ const AdminDashboard = () => {
         fetchTopics();
     }, []);
 
+    const { refreshTopics } = useTopics();
+
     const deleteHandler = async (id) => {
         if (window.confirm('Are you sure you want to delete this topic?')) {
             try {
                 await api.delete(`/topics/${id}`);
-                fetchTopics(); // Refresh list
+                fetchTopics(); // Refresh local list
+                refreshTopics(); // Refresh global context
             } catch (err) {
                 alert('Failed to delete topic');
             }
@@ -77,7 +81,7 @@ const AdminDashboard = () => {
                                 </td>
                                 <td className="p-4 text-right space-x-2">
                                     <Link
-                                        to={`/admin/topic/edit/${topic.topicId}`}
+                                        to={`/admin/topic/edit/${topic._id}`}
                                         className="inline-flex p-2 text-blue-400 hover:bg-blue-900/30 rounded-md transition-colors"
                                         title="Edit"
                                     >

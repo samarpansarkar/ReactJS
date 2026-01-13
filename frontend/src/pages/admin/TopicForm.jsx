@@ -3,10 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../api/client';
 import { Save, ArrowLeft, Plus, Trash } from 'lucide-react';
 import { iconRegistry, componentRegistry } from '../../utils/componentRegistry';
+import { useTopics } from '../../context/TopicContext';
 
 const TopicForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { refreshTopics } = useTopics();
     const isEdit = !!id;
 
     const [loading, setLoading] = useState(false);
@@ -136,6 +138,7 @@ const TopicForm = () => {
             } else {
                 await api.post('/topics', formData);
             }
+            await refreshTopics(); // Update global state
             navigate('/admin/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to save topic');
@@ -178,8 +181,7 @@ const TopicForm = () => {
                                 name="topicId"
                                 value={formData.topicId}
                                 onChange={handleChange}
-                                disabled={isEdit}
-                                className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white disabled:opacity-50"
+                                className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
                                 required
                             />
                         </div>

@@ -219,16 +219,32 @@ const TopicLayout = ({ title, sections, basePath }) => {
 
                 <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-12 text-center border border-gray-100 dark:border-gray-800 max-w-2xl mx-auto">
                     <BookOpen className="w-20 h-20 text-indigo-100 dark:text-indigo-900/50 mx-auto mb-6" />
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                        Ready to learn?
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-md mx-auto">
-                        Select any topic from the list above to dive into the details, see code examples, and play with live demos.
-                    </p>
-                    <div className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-900/20 px-4 py-2 rounded-full">
-                        <Play className="w-4 h-4" />
-                        <span>Choose a topic to begin</span>
-                    </div>
+                    {topicId ? (
+                        <>
+                            <h3 className="text-xl font-bold text-red-600 mb-3">
+                                Topic Not Found
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-300 mb-4">
+                                The topic "{topicId}" could not be found in this subject.
+                            </p>
+                            <p className="text-xs text-gray-400">
+                                Debug: Check if the Topic ID matches exactly.
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                                Ready to learn?
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-md mx-auto">
+                                Select any topic from the list above to dive into the details, see code examples, and play with live demos.
+                            </p>
+                            <div className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-900/20 px-4 py-2 rounded-full">
+                                <Play className="w-4 h-4" />
+                                <span>Choose a topic to begin</span>
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
         </div>

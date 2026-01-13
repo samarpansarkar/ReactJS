@@ -24,7 +24,17 @@ router.get("/", async (req, res) => {
 // @access  Public
 router.get("/:id", async (req, res) => {
   try {
-    const topic = await Topic.findOne({ topicId: req.params.id });
+    let topic;
+    // Check if id is a valid ObjectId
+    if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      topic = await Topic.findById(req.params.id);
+    }
+
+    // If not found by ID (or not an ID), try topicId slug
+    if (!topic) {
+      topic = await Topic.findOne({ topicId: req.params.id });
+    }
+
     if (topic) {
       res.json(topic);
     } else {
@@ -59,10 +69,21 @@ router.post("/", protect, admin, async (req, res) => {
 // @access  Private/Admin
 router.put("/:id", protect, admin, async (req, res) => {
   try {
-    const topic = await Topic.findOne({ topicId: req.params.id });
+    let topic;
+    if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      topic = await Topic.findById(req.params.id);
+    }
+    if (!topic) {
+      topic = await Topic.findOne({ topicId: req.params.id });
+    }
 
     if (topic) {
-      Object.assign(topic, req.body);
+      const updates = req.body;
+      delete updates._id;
+      delete updates.createdAt;
+      delete updates.updatedAt;
+
+      Object.assign(topic, updates);
       const updatedTopic = await topic.save();
       res.json(updatedTopic);
     } else {
