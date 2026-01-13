@@ -4,16 +4,17 @@ import api from '../../api/client';
 import { Save, ArrowLeft, Plus, Trash } from 'lucide-react';
 import { iconRegistry, componentRegistry } from '../../utils/componentRegistry';
 import { useTopics } from '../../context/TopicContext';
+import { useSubjects } from '../../context/SubjectContext';
 
 const TopicForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { refreshTopics } = useTopics();
+    const { subjects } = useSubjects();
     const isEdit = !!id;
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [subjects, setSubjects] = useState([]);
 
     const [formData, setFormData] = useState({
         topicId: '',
@@ -39,19 +40,18 @@ const TopicForm = () => {
     });
 
     useEffect(() => {
-        const fetchSubjects = async () => {
-            try {
-                const { data } = await api.get('/subjects');
-                setSubjects(data);
-                if (!isEdit && data.length > 0) {
-                    setFormData(prev => ({ ...prev, subject: data[0].path.replace('/', '') }));
-                }
-            } catch (err) {
-                console.error('Failed to fetch subjects');
-            }
-        };
-        fetchSubjects();
+        if (!isEdit && subjects.length > 0) {
+            // Default to first subject if creating new
+            // But we only want to do this if we haven't touched it, or maybe strictly on mount?
+            // Actually, formData.subject has a default 'react', we should probably override it
+            // with the first available subject if 'react' isn't in the list?
+            // For now, let's trust the user to pick, or default to the first one.
+            const firstSubject = subjects[0].path.replace('/', '');
+            setFormData(prev => ({ ...prev, subject: firstSubject }));
+        }
+    }, [subjects, isEdit]);
 
+    useEffect(() => {
         if (isEdit) {
             const fetchTopic = async () => {
                 try {
@@ -237,17 +237,18 @@ const TopicForm = () => {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm text-gray-400 mb-1">Icon</label>
-                            <select
+                            <label className="block text-sm text-gray-400 mb-1">Icon (Lucide Name)</label>
+                            <input
+                                type="text"
                                 name="icon"
                                 value={formData.icon}
                                 onChange={handleChange}
+                                placeholder="e.g. Zap, Activity, Home"
                                 className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
-                            >
-                                {Object.keys(iconRegistry).map(icon => (
-                                    <option key={icon} value={icon}>{icon}</option>
-                                ))}
-                            </select>
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                                Enter exact component name from <a href="https://lucide.dev/icons" target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline">lucide.dev</a>
+                            </p>
                         </div>
                         <div>
                             <label className="block text-sm text-gray-400 mb-1">Component Demo</label>
