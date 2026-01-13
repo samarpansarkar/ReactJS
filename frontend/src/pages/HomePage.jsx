@@ -50,7 +50,7 @@ const HomePage = () => {
                     <Link to="/react" className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 dark:shadow-none">
                         Start Learning
                     </Link>
-                    <a href="https://github.com/samarpansarkar/ReactJS" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                    <a href="https://github.com/samarpansarkar" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                         View on GitHub
                     </a>
                 </div>
