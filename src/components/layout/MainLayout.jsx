@@ -43,7 +43,7 @@ const MainLayout = () => {
     }, [currentSubject]);
 
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50">
+        <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
             {/* Top Header - Always visible */}
             <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
@@ -62,7 +62,7 @@ const MainLayout = () => {
 
                 {/* Main Content Area */}
                 <main
-                    className={`flex-1 p-4 md:p-8 transition-all duration-200 ${currentSubject !== 'home' ? 'md:ml-64' : ''
+                    className={`flex-1 p-4 md:p-8 transition-all duration-200 dark:text-gray-100 ${currentSubject !== 'home' ? 'md:ml-64' : ''
                         }`}
                 >
                     <Outlet />

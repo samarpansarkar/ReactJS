@@ -12,9 +12,9 @@ export default function LazyLoadDemo() {
                 {show ? 'Hide' : 'Load'} Component
             </button>
             {show && (
-                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
-                    <p className="font-bold text-yellow-900">Component Loaded!</p>
-                    <p className="text-sm text-yellow-700">This was loaded on demand</p>
+                <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded transition-colors">
+                    <p className="font-bold text-yellow-900 dark:text-yellow-300">Component Loaded!</p>
+                    <p className="text-sm text-yellow-700 dark:text-yellow-500">This was loaded on demand</p>
                 </div>
             )}
         </div>

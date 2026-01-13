@@ -19,7 +19,7 @@ const CustomInput = forwardRef((props, ref) => {
     return (
         <input
             ref={inputRef}
-            className="border-2 border-indigo-200 rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500 w-full"
+            className="border-2 border-indigo-200 dark:border-indigo-800 dark:bg-gray-900 dark:text-white rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none w-full transition-colors"
             placeholder="Type something..."
         />
     );
@@ -30,8 +30,8 @@ const UseImperativeHandleDemo = () => {
 
     return (
         <div className="space-y-6">
-            <div className="p-4 bg-white border border-gray-200 rounded-lg">
-                <p className="mb-4 text-gray-600 text-sm">
+            <div className="p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors">
+                <p className="mb-4 text-gray-600 dark:text-gray-300 text-sm">
                     The parent can only trigger specific actions exposed by the child via <code>useImperativeHandle</code>.
                 </p>
 
@@ -42,13 +42,13 @@ const UseImperativeHandleDemo = () => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => childRef.current.alertValue()}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm"
+                        className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 dark:hover:bg-indigo-500 text-sm transition-colors"
                     >
                         Alert Value
                     </button>
                     <button
                         onClick={() => childRef.current.resetValue()}
-                        className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm"
+                        className="px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white rounded hover:bg-gray-700 dark:hover:bg-gray-600 text-sm transition-colors"
                     >
                         Reset & Focus
                     </button>

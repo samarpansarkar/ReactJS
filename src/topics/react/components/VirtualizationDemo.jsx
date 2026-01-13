@@ -12,12 +12,12 @@ export default function VirtualizationDemo() {
 
     return (
         <div className="space-y-3">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
                 Showing {page * itemsPerPage + 1}-{Math.min((page + 1) * itemsPerPage, items.length)} of {items.length}
             </p>
-            <div className="h-48 overflow-auto border border-gray-300 rounded p-2 bg-white">
+            <div className="h-48 overflow-auto border border-gray-300 dark:border-gray-700 rounded p-2 bg-white dark:bg-gray-800 transition-colors">
                 {visibleItems.map((item, idx) => (
-                    <div key={page * itemsPerPage + idx} className="p-2 border-b text-sm">
+                    <div key={page * itemsPerPage + idx} className="p-2 border-b dark:border-gray-700 text-sm text-gray-900 dark:text-gray-100">
                         {item}
                     </div>
                 ))}
@@ -33,7 +33,7 @@ export default function VirtualizationDemo() {
                 <button
                     onClick={() => setPage(p => Math.min(Math.floor(items.length / itemsPerPage) - 1, p + 1))}
                     disabled={(page + 1) * itemsPerPage >= items.length}
-                    className="px-3 py-1 bg-indigo-500 text-white rounded text-sm disabled:opacity-50"
+                    className="px-3 py-1 bg-indigo-500 text-white rounded text-sm disabled:opacity-50 hover:bg-indigo-600 dark:hover:bg-indigo-400 transition-colors"
                 >
                     Next
                 </button>
