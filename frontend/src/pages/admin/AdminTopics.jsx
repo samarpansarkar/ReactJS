@@ -11,7 +11,7 @@ const AdminTopics = () => {
     const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [selectedSubject, setSelectedSubject] = useState('All');
+    const [selectedSubject, setSelectedSubject] = useState('');
 
     const fetchTopics = async () => {
         try {
@@ -27,6 +27,13 @@ const AdminTopics = () => {
     useEffect(() => {
         fetchTopics();
     }, []);
+
+    // Set default subject
+    useEffect(() => {
+        if (!selectedSubject && subjects.length > 0) {
+            setSelectedSubject(subjects[0].path.replace('/', ''));
+        }
+    }, [subjects, selectedSubject]);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedTopic, setSelectedTopic] = useState(null);
@@ -50,8 +57,8 @@ const AdminTopics = () => {
         }
     };
 
-    const filteredTopics = selectedSubject === 'All'
-        ? topics
+    const filteredTopics = !selectedSubject
+        ? []
         : topics.filter(topic => topic.subject === selectedSubject);
 
     if (loading) return <div className="text-white">Loading...</div>;
@@ -74,15 +81,6 @@ const AdminTopics = () => {
 
             {/* Subject Filter Buttons */}
             <div className="flex flex-wrap gap-2 mb-6">
-                <button
-                    onClick={() => setSelectedSubject('All')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedSubject === 'All'
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
-                        }`}
-                >
-                    All
-                </button>
                 {subjects.map(subject => {
                     const subjectKey = subject.path.replace('/', '');
                     return (
@@ -90,8 +88,8 @@ const AdminTopics = () => {
                             key={subject._id}
                             onClick={() => setSelectedSubject(subjectKey)}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedSubject === subjectKey
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+                                ? 'bg-indigo-600 text-white'
+                                : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                                 }`}
                         >
                             {subject.title || subject.name}

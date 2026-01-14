@@ -1,18 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import api from '@/api/client';
-import { Edit, Trash2, Plus, BookOpen, FileText } from 'lucide-react';
+import { useSubjects } from '@/context/SubjectContext';
+import { Edit, Trash2, Plus, BookOpen, FileText, Filter } from 'lucide-react';
 import Modal from '@/components/common/Modal';
 
 const AdminTheories = () => {
+    const { subjects } = useSubjects();
     const [theories, setTheories] = useState([]);
+    const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    const fetchTheories = async () => {
+    // Filtering State
+    const [selectedSubject, setSelectedSubject] = useState('');
+    const [selectedTopic, setSelectedTopic] = useState('');
+
+    const fetchData = async () => {
         try {
-            const { data } = await api.get('/theory');
-            setTheories(data);
+            const [theoriesRes, topicsRes] = await Promise.all([
+                api.get('/theory'),
+                api.get('/topics')
+            ]);
+            setTheories(theoriesRes.data);
+            setTopics(topicsRes.data);
             setLoading(false);
         } catch (err) {
             setError('Failed to fetch content');
@@ -21,8 +32,37 @@ const AdminTheories = () => {
     };
 
     useEffect(() => {
-        fetchTheories();
+        fetchData();
     }, []);
+
+    // Set default subject once subjects are loaded
+    useEffect(() => {
+        if (!selectedSubject && subjects.length > 0) {
+            setSelectedSubject(subjects[0].path.replace('/', ''));
+        }
+    }, [subjects, selectedSubject]);
+
+    // Derived Data for Filters (Topics for the selected subject)
+    const filteredTopics = useMemo(() => {
+        return !selectedSubject
+            ? []
+            : topics.filter(t => (t.subject || '').toLowerCase() === selectedSubject.toLowerCase() || t.subject === selectedSubject || t.path?.includes(selectedSubject));
+    }, [selectedSubject, topics]);
+
+    // Set default topic when filteredTopics changes (e.g., subject changed)
+    useEffect(() => {
+        // Only set default if:
+        // 1. We have filtered topics
+        // 2. AND (Currently selected topic is empty OR currently selected topic is NOT in the new filtered list)
+        if (filteredTopics.length > 0) {
+            const isValid = filteredTopics.some(t => t.topicId === selectedTopic);
+            if (!selectedTopic || !isValid) {
+                setSelectedTopic(filteredTopics[0].topicId);
+            }
+        } else {
+            setSelectedTopic('');
+        }
+    }, [filteredTopics, selectedTopic]);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedTheory, setSelectedTheory] = useState(null);
@@ -37,14 +77,32 @@ const AdminTheories = () => {
 
         try {
             await api.delete(`/theory/${selectedTheory.topicId}`);
-            fetchTheories();
+            fetchData();
             setShowDeleteModal(false);
             setSelectedTheory(null);
         } catch (err) {
             console.error("Failed to delete content", err);
-            // Could add a toast here later
         }
     };
+
+    // Filtering Logic
+    const filteredTheories = theories.filter(theory => {
+        if (!selectedSubject || !selectedTopic) return false;
+
+        // Step 1: Filter by Subject
+        const subjectKey = selectedSubject.toLowerCase();
+        const theorySubject = (theory.subject || '').toLowerCase();
+        if (theorySubject !== subjectKey && !theory.topicId?.includes(subjectKey)) {
+            return false;
+        }
+
+        // Step 2: Filter by Topic
+        if (theory.topicId !== selectedTopic && theory.section !== selectedTopic) {
+            return false;
+        }
+
+        return true;
+    });
 
     if (loading) return <div className="text-white">Loading...</div>;
     if (error) return <div className="text-red-400">{error}</div>;
@@ -64,6 +122,51 @@ const AdminTheories = () => {
                 </Link>
             </div>
 
+            {/* Filters Section */}
+            <div className="space-y-4 mb-6">
+
+                {/* Level 1: Subject Filter */}
+                <div className="flex flex-wrap gap-2">
+                    {subjects.map(subject => {
+                        const subjectKey = subject.path.replace('/', '');
+                        return (
+                            <button
+                                key={subject._id}
+                                onClick={() => {
+                                    setSelectedSubject(subjectKey);
+                                    // Topic will update via useEffect
+                                }}
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedSubject === subjectKey
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+                                    }`}
+                            >
+                                {subject.title || subject.name}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Level 2: Topic Filter */}
+                {selectedSubject && filteredTopics.length > 0 && (
+                    <div className="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg border border-gray-700/50">
+                        <Filter size={16} className="text-gray-400" />
+                        <span className="text-sm text-gray-400">Filter by Topic:</span>
+                        <select
+                            value={selectedTopic}
+                            onChange={(e) => setSelectedTopic(e.target.value)}
+                            className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 outline-none"
+                        >
+                            {filteredTopics.map(topic => (
+                                <option key={topic._id} value={topic.topicId}>
+                                    {topic.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+            </div>
+
             <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden shadow-lg">
                 <table className="w-full text-left border-collapse">
                     <thead className="bg-gray-750 text-gray-400 text-sm uppercase tracking-wider">
@@ -76,7 +179,7 @@ const AdminTheories = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-700 text-gray-300">
-                        {theories.map((theory) => (
+                        {filteredTheories.map((theory) => (
                             <tr key={theory._id} className="hover:bg-gray-750 transition-colors">
                                 <td className="p-4 font-medium text-white flex items-center gap-2">
                                     <FileText size={16} className="text-gray-500" />
@@ -95,21 +198,14 @@ const AdminTheories = () => {
                                 </td>
                                 <td className="p-4 text-right space-x-2">
                                     <Link
-                                        to={`/admin/topic/edit/${theory.topicId}`} // Using topicId (slug) or _id depending on route support
+                                        to={`/admin/topic/edit/${theory.topicId}`}
                                         className="inline-flex p-2 text-blue-400 hover:bg-blue-900/30 rounded-md transition-colors"
                                         title="Edit"
-                                        onClick={(e) => {
-                                            // Double check route param expectation
-                                            // TheoryPracticalForm loads by ID or Slug?
-                                            // Route is /topic/edit/:id
-                                            // Backend: router.get("/:id", ...) checks ObjId then topicId
-                                            // So passing topicId is safe and readable
-                                        }}
                                     >
                                         <Edit size={18} />
                                     </Link>
                                     <button
-                                        onClick={() => checkDelete(theory)} // API supports topicId delete
+                                        onClick={() => checkDelete(theory)}
                                         className="inline-flex p-2 text-red-400 hover:bg-red-900/30 rounded-md transition-colors"
                                         title="Delete"
                                     >
@@ -118,10 +214,10 @@ const AdminTheories = () => {
                                 </td>
                             </tr>
                         ))}
-                        {theories.length === 0 && (
+                        {filteredTheories.length === 0 && (
                             <tr>
                                 <td colSpan="5" className="p-8 text-center text-gray-500">
-                                    No content found. Click "Add Content" to start.
+                                    No content found matching filter.
                                 </td>
                             </tr>
                         )}
