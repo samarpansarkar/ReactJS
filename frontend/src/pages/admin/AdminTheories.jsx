@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '@/api/client';
 import { Edit, Trash2, Plus, BookOpen, FileText } from 'lucide-react';
+import Modal from '@/components/common/Modal';
 
 const AdminTheories = () => {
     const [theories, setTheories] = useState([]);
@@ -23,14 +24,25 @@ const AdminTheories = () => {
         fetchTheories();
     }, []);
 
-    const deleteHandler = async (id) => {
-        if (window.confirm('Are you sure you want to delete this content?')) {
-            try {
-                await api.delete(`/theory/${id}`);
-                fetchTheories();
-            } catch (err) {
-                alert('Failed to delete content');
-            }
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedTheory, setSelectedTheory] = useState(null);
+
+    const checkDelete = (theory) => {
+        setSelectedTheory(theory);
+        setShowDeleteModal(true);
+    };
+
+    const handleDelete = async () => {
+        if (!selectedTheory) return;
+
+        try {
+            await api.delete(`/theory/${selectedTheory.topicId}`);
+            fetchTheories();
+            setShowDeleteModal(false);
+            setSelectedTheory(null);
+        } catch (err) {
+            console.error("Failed to delete content", err);
+            // Could add a toast here later
         }
     };
 
@@ -97,7 +109,7 @@ const AdminTheories = () => {
                                         <Edit size={18} />
                                     </Link>
                                     <button
-                                        onClick={() => deleteHandler(theory.topicId)} // API supports topicId delete
+                                        onClick={() => checkDelete(theory)} // API supports topicId delete
                                         className="inline-flex p-2 text-red-400 hover:bg-red-900/30 rounded-md transition-colors"
                                         title="Delete"
                                     >
@@ -116,8 +128,40 @@ const AdminTheories = () => {
                     </tbody>
                 </table>
             </div>
+
+            <Modal
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                title="Confirm Deletion"
+                footer={
+                    <>
+                        <button
+                            onClick={() => setShowDeleteModal(false)}
+                            className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleDelete}
+                            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                        >
+                            Delete Content
+                        </button>
+                    </>
+                }
+            >
+                <div className="space-y-4">
+                    <p className="text-gray-300">
+                        Are you sure you want to delete <span className="font-bold text-white">{selectedTheory?.title}</span>?
+                    </p>
+                    <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 text-yellow-200 text-sm">
+                        Warning: This action cannot be undone.
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 };
 
 export default AdminTheories;
+

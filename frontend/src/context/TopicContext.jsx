@@ -65,7 +65,10 @@ export const TopicProvider = ({ children }) => {
                 title: topic.name,
                 icon: getIcon(topic.icon),
                 color: topic.color,
-                subtopics: subtopics
+                subtopics: subtopics.map(sub => ({
+                    ...sub,
+                    id: sub.topicId // Ensure id is available for Sidebar routing
+                }))
             };
         }).filter(section => section.subtopics.length > 0 || true);
     };

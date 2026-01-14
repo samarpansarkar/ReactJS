@@ -62,7 +62,7 @@ const SubjectForm = () => {
                 await api.post('/subjects', formData);
             }
             await refreshSubjects();
-            navigate('/admin/dashboard');
+            navigate('/admin/subjects');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to save subject');
         } finally {
@@ -78,7 +78,7 @@ const SubjectForm = () => {
                 </h2>
                 <button
                     type="button"
-                    onClick={() => navigate('/admin/dashboard')}
+                    onClick={() => navigate('/admin/subjects')}
                     className="text-gray-400 hover:text-white flex items-center gap-2"
                 >
                     <ArrowLeft size={18} /> Back
