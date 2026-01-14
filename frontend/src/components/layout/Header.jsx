@@ -3,6 +3,7 @@ import { BookOpen, Menu, X, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import { useSubjects } from '@/context/SubjectContext';
+import Search from './Search';
 
 const Header = ({ toggleSidebar }) => {
     const location = useLocation();
@@ -60,6 +61,10 @@ const Header = ({ toggleSidebar }) => {
                             ))}
                         </nav>
 
+                        <div className="w-64 hidden lg:block">
+                            <Search />
+                        </div>
+
                         <button
                             onClick={toggleTheme}
                             className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -84,6 +89,10 @@ const Header = ({ toggleSidebar }) => {
                                 <Moon className="w-5 h-5 text-indigo-600" />
                             )}
                         </button>
+
+                        <div className="md:hidden">
+                            {/* Mobile Search Trigger could go here, but let's put it in the menu for now */}
+                        </div>
 
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
