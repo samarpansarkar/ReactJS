@@ -14,7 +14,7 @@ const AdminTheories = () => {
 
     // Filtering State
     const [selectedSubject, setSelectedSubject] = useState('');
-    const [selectedTopic, setSelectedTopic] = useState('');
+    const [selectedTopic, setSelectedTopic] = useState('All');
 
     const fetchData = async () => {
         try {
@@ -51,16 +51,14 @@ const AdminTheories = () => {
 
     // Set default topic when filteredTopics changes (e.g., subject changed)
     useEffect(() => {
-        // Only set default if:
-        // 1. We have filtered topics
-        // 2. AND (Currently selected topic is empty OR currently selected topic is NOT in the new filtered list)
+        // If we have topics, default to 'All' if current selection is invalid or empty
         if (filteredTopics.length > 0) {
             const isValid = filteredTopics.some(t => t.topicId === selectedTopic);
-            if (!selectedTopic || !isValid) {
-                setSelectedTopic(filteredTopics[0].topicId);
+            if (selectedTopic !== 'All' && !isValid) {
+                setSelectedTopic('All');
             }
         } else {
-            setSelectedTopic('');
+            setSelectedTopic('All');
         }
     }, [filteredTopics, selectedTopic]);
 
@@ -87,7 +85,7 @@ const AdminTheories = () => {
 
     // Filtering Logic
     const filteredTheories = theories.filter(theory => {
-        if (!selectedSubject || !selectedTopic) return false;
+        if (!selectedSubject) return false;
 
         // Step 1: Filter by Subject
         const subjectKey = selectedSubject.toLowerCase();
@@ -97,8 +95,10 @@ const AdminTheories = () => {
         }
 
         // Step 2: Filter by Topic
-        if (theory.topicId !== selectedTopic && theory.section !== selectedTopic) {
-            return false;
+        if (selectedTopic !== 'All') {
+            if (theory.topicId !== selectedTopic && theory.section !== selectedTopic) {
+                return false;
+            }
         }
 
         return true;
@@ -134,7 +134,7 @@ const AdminTheories = () => {
                                 key={subject._id}
                                 onClick={() => {
                                     setSelectedSubject(subjectKey);
-                                    // Topic will update via useEffect
+                                    // Topic will update via useEffect to 'All'
                                 }}
                                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedSubject === subjectKey
                                     ? 'bg-indigo-600 text-white'
@@ -157,6 +157,7 @@ const AdminTheories = () => {
                             onChange={(e) => setSelectedTopic(e.target.value)}
                             className="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 outline-none"
                         >
+                            <option value="All">All Topics</option>
                             {filteredTopics.map(topic => (
                                 <option key={topic._id} value={topic.topicId}>
                                     {topic.name}
