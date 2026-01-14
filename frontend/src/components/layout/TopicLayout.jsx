@@ -1,4 +1,4 @@
-import { useState, useMemo, Suspense } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { BookOpen, Play } from 'lucide-react';
 import LiveRenderer from '@/components/LiveRenderer';
@@ -31,10 +31,10 @@ const TopicLayout = ({ title, sections, basePath }) => {
                     <div className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                <div className={`p-1.5 rounded-lg ${activeContent.color ? `bg-gradient-to-br ${activeContent.color} text-white` : 'text-indigo-600 dark:text-indigo-400'}`}>
+                                <div className={`p-1.5 rounded-lg ${activeContent.color ? `bg-linear-to-br ${activeContent.color} text-white` : 'text-indigo-600 dark:text-indigo-400'}`}>
                                     <activeContent.icon className="w-6 h-6" />
                                 </div>
-                                <span className={activeContent.color ? `bg-gradient-to-r ${activeContent.color} bg-clip-text text-transparent` : ''}>
+                                <span className={activeContent.color ? `bg-linear-to-r ${activeContent.color} bg-clip-text text-transparent` : ''}>
                                     {activeContent.title}
                                 </span>
                             </h2>
@@ -187,16 +187,6 @@ const TopicLayout = ({ title, sections, basePath }) => {
                                 <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex-1">
                                     {activeContent.liveCode ? (
                                         <LiveRenderer code={activeContent.liveCode} />
-                                    ) : activeContent.component ? (
-                                        <div className="relative min-h-[200px]">
-                                            <Suspense fallback={
-                                                <div className="flex items-center justify-center absolute inset-0 bg-white/50 dark:bg-gray-900/50 z-10">
-                                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                                                </div>
-                                            }>
-                                                <activeContent.component />
-                                            </Suspense>
-                                        </div>
                                     ) : (
                                         <div className="text-center text-gray-500 dark:text-gray-400 py-12">
                                             No interactive demo available for this topic.

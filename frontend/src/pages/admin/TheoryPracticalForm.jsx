@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '@/api/client';
 import { Save, ArrowLeft, Plus, Trash } from 'lucide-react';
-import { iconRegistry, componentRegistry } from '@/utils/componentRegistry';
+import { iconRegistry } from '@/utils/componentRegistry';
 import { useTopics } from '@/context/TopicContext';
 import { useSubjects } from '@/context/SubjectContext';
 
@@ -24,7 +24,7 @@ const TheoryPracticalForm = () => {
         subject: 'react',
         icon: 'Box',
         description: '',
-        componentKey: '',
+        // componentKey: '', // Deprecated
         liveCode: '',
         order: 0,
         sectionOrder: 0,
@@ -312,20 +312,7 @@ const TheoryPracticalForm = () => {
                                 Enter exact component name from <a href="https://lucide.dev/icons" target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline">lucide.dev</a>
                             </p>
                         </div>
-                        <div>
-                            <label className="block text-sm text-gray-400 mb-1">Component Demo</label>
-                            <select
-                                name="componentKey"
-                                value={formData.componentKey}
-                                onChange={handleChange}
-                                className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
-                            >
-                                <option value="">None</option>
-                                {Object.keys(componentRegistry).map(comp => (
-                                    <option key={comp} value={comp}>{comp}</option>
-                                ))}
-                            </select>
-                        </div>
+
                         <div>
                             <label className="block text-sm text-gray-400 mb-1">Order (Sort Priority)</label>
                             <input

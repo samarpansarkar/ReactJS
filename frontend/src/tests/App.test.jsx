@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import App from '../App';
+import App from '@/App';
 
 // Mock the API client to prevent network calls
 vi.mock('../api/client', () => {
@@ -17,7 +17,7 @@ vi.mock('../api/client', () => {
     }
 });
 
-import { ThemeProvider } from '../context/ThemeContext';
+import { ThemeProvider } from '@/context/ThemeContext';
 
 describe('App', () => {
     it('renders without crashing', async () => {

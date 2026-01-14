@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getIcon, iconRegistry } from '../utils/componentRegistry';
+import { getIcon, iconRegistry } from '@/utils/componentRegistry';
 import { Box } from 'lucide-react';
 
 describe('Component Registry', () => {

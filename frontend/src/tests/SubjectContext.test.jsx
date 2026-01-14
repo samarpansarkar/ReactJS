@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { SubjectProvider, useSubjects } from '../context/SubjectContext';
-import api from '../api/client';
+import { SubjectProvider, useSubjects } from '@/context/SubjectContext';
+import api from '@/api/client';
 
 // Mock API
 vi.mock('../api/client');

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import api from '@/api/client';
-import { getIcon, getComponent } from '@/utils/componentRegistry';
+import { getIcon } from '@/utils/componentRegistry';
 
 const TopicContext = createContext();
 
@@ -14,9 +14,7 @@ export const TopicProvider = ({ children }) => {
 
     const processTheory = (t) => ({
         ...t,
-        id: t.topicId,
         icon: getIcon(t.icon),
-        component: getComponent(t.componentKey),
         theory: {
             ...t.theory,
             pros: t.theory?.pros || [],
